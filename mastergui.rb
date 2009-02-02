@@ -2,7 +2,7 @@ require 'mastermodel'
 
 SIZE=50
 
-Shoes.app :title => "Mastermind", :width => 300, :height => 550, :resizable => false do
+Shoes.app :title => "Mastermind", :width => 350, :height => 550, :resizable => false do
 
   background "#ccc"
 
@@ -143,11 +143,11 @@ Shoes.app :title => "Mastermind", :width => 300, :height => 550, :resizable => f
 
   flow do
 
-    flow :width => SIZE do
+    flow :width => SIZE*2 do
       @column = stack
     end
 
-    flow :width => -SIZE do
+    flow :width => -SIZE*2 do
       @board = stack
     end
 

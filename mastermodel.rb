@@ -1,5 +1,3 @@
-require 'set'
-
 class Game
 
   attr_reader :colors,:pegs,:guesses,:rows,:puzzle
