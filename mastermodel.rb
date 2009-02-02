@@ -1,6 +1,7 @@
 require 'set'
 
 class Game
+
   attr_reader :colors,:pegs,:guesses,:rows,:puzzle
 
   def initialize colors = 6, pegs = 4, guesses = 10
@@ -13,10 +14,23 @@ class Game
     @puzzle = (1..pegs).collect { (1..colors).rand }
   end
 
+  def blank
+    Array.new(pegs) {0}
+  end
+
+  def solved?
+    @solved
+  end
+
+  def lost?
+    @rows.count == @guesses
+  end
+
   def guess! g
     raise "Out of guesses!" if @rows.length >= @guesses
+    raise "Solved!" if @solved
     @rows << g
-    @puzzle == g
+    @solved = @puzzle == g
   end
 
   def check g

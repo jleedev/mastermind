@@ -13,30 +13,42 @@ def hue2rgb h
   end
 end
 
-Shoes.app :title => "Mastermind" do
+SIZE=50
+
+Shoes.app :title => "Mastermind", :width => 300, :height => 550 do
+
+  background "#ccc"
 
   @game = Game.new
+
+  @current_color = 1
+  @pending = @game.blank
+
+  # PREPARE THE LIST OF COLORS
 
   def colors n
     1.upto(n).collect {|i| hue2rgb 360*i/n}
   end
-
   COLORS = colors @game.colors
 
-  @color_panel = stack do
-    colors @game.colors
-  end
+  # RENDER A BIG PEG
 
-  background white
-
-  SIZE=50
-
-  def peg i
+  def peg i, highlight = false
     image SIZE,SIZE do
-      fill COLORS[i-1]
+      if highlight
+        fill "#6C0C7B"
+        rect 0,0,SIZE,SIZE
+      end
+      if i != 0
+        fill COLORS[i-1]
+      else
+        nofill
+      end
       oval 1,1,SIZE-2
     end
   end
+
+  # RENDER A SMALL PEG
 
   def minipeg i,clr
     image SIZE/2,SIZE/2 do
@@ -45,12 +57,16 @@ Shoes.app :title => "Mastermind" do
     end
   end
 
+  # RENDER A CHUNK OF SMALL PEGS
+
   def mini_pegs w,b
-    flow :width => (w+b+1)*SIZE/4 do
+    flow :width => SIZE do
       w.times { |i| minipeg i,white }
       b.times { |i| minipeg i,black }
     end
   end
+
+  # RENDER A ROW OF PEGS
 
   def row pegs
     flow :width => SIZE*pegs.count do
@@ -58,11 +74,39 @@ Shoes.app :title => "Mastermind" do
     end
   end
 
-  def column pegs
-    stack do
-      pegs.each {|i| peg i}
+  # RENDER THE PENDING ROW OF PEGS
+
+  def pending_row
+    flow :width => SIZE*@pending.count do
+      @pending.each_with_index do |pg,i|
+        pg = peg pg
+        pg.click do
+          @pending[i] = @current_color
+          render
+          commit if @pending.all? &:nonzero?
+        end
+      end
     end
   end
+
+  # REDRAW THE COLOR PICKER
+
+  def column
+    pegs = 1..@game.colors
+    @column.clear do
+      stack do
+        pegs.each do |i|
+          pg = peg i, @current_color == i
+          pg.click do
+            @current_color = i
+            column
+          end
+        end
+      end
+    end
+  end
+
+  # REDRAW THE GUESSING AREA
 
   def render
     @board.clear do
@@ -75,31 +119,41 @@ Shoes.app :title => "Mastermind" do
         end
       end
 
-    end
-  end
-
-  stack :margin => 8 do
-    border red, :strokewidth => 5
-    flow :margin => 5 do
-
-      flow :width => SIZE+10, :margin => 5 do
-        column (1..@game.colors)
-      end
-
-      stack :width => 5 do
-        background red
-      end
-
-      flow :width => -SIZE-15, :margin => 5 do
-        @board = stack
+      if @game.solved? or @game.lost?
+        flow :width => 200 do
+          background gray
+          row @game.puzzle
+        end
+      else
+        pending_row
       end
 
     end
   end
 
-  @game.guess! [1,2,3,4]
-  p @game
+  # OH SHIT HE MADE A GUESS
+  
+  def commit
+    @game.guess! @pending
+    @pending = @game.blank
+    render
+  end
 
+  # GO GO GO
+
+  flow do
+
+    flow :width => SIZE do
+      @column = stack
+    end
+
+    flow :width => -SIZE do
+      @board = stack
+    end
+
+  end
+
+  column
   render
 
 end
