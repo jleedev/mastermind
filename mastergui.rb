@@ -1,3 +1,5 @@
+#!/usr/bin/env shoes
+
 require 'mastermodel'
 
 SIZE=50
