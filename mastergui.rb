@@ -15,7 +15,7 @@ end
 
 SIZE=50
 
-Shoes.app :title => "Mastermind", :width => 300, :height => 550 do
+Shoes.app :title => "Mastermind", :width => 300, :height => 550, :resizable => false do
 
   background "#ccc"
 
