@@ -9,7 +9,7 @@ class Game
 
     @rows = []
 
-    @puzzle = (1..pegs).collect { rand colors + 1 }
+    @puzzle = (1..pegs).collect { rand(colors) + 1 }
   end
 
   def blank

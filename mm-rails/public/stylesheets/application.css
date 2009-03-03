@@ -1,3 +1,7 @@
+#main {
+  margin-left: 100px;
+}
+
 .column {
   display: table;
   width: 50px;
@@ -22,9 +26,31 @@
   outline: 2px solid black;
 }
 
-.piece.p0 { background: red; color: red; }
-.piece.p1 { background: yellow; color: yellow; }
-.piece.p2 { background: green; color: green; }
-.piece.p3 { background: blue; color: blue; }
-.piece.p4 { background: orange; color: orange }
-.piece.p5 { background: purple; color: purple }
+.piece.p0 { background: white; color: white; outline: 1px solid black; }
+.piece.p1 { background: red; color: red; }
+.piece.p2 { background: yellow; color: yellow; }
+.piece.p3 { background: green; color: green; }
+.piece.p4 { background: blue; color: blue; }
+.piece.p5 { background: orange; color: orange }
+.piece.p6 { background: purple; color: purple }
+
+.hints {
+  display: table-cell;
+}
+
+.mini {
+  width: 25px;
+  height: 25px;
+  float: left;
+}
+.mini.white { background: white; outline: 1px solid black; }
+.mini.black { background: black; outline: 1px solid black; }
+
+.turn {
+  display: table-row;
+}
+
+div.turn * {
+  display: table-cell;
+  vertical-align: top;
+}

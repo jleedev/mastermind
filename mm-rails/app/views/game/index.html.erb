@@ -1,2 +1,16 @@
 <%= render_column %>
-<%= render_row session[:game].puzzle %>
+
+<div id="main">
+  <% session[:game].rows.each do |row| %>
+    <div class="turn">
+      <%= render_row row %>
+      <%= render_mini session[:game].check row %>
+    </div>
+  <% end %>
+
+  <% if session[:game].solved? or session[:game].lost? %>
+    <%= render_row session[:game].puzzle %>
+  <% else %>
+    <%= render_guess %>
+  <% end %>
+</div>
