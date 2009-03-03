@@ -1,0 +1,9 @@
+<!doctype html>
+<title>Mastermind</title>
+<%= stylesheet_link_tag "application" %>
+<div id="game">
+  <%= yield %>
+</div>
+<ul id="links">
+  <%= link_to "New game", :action => :new %>
+</ul>
